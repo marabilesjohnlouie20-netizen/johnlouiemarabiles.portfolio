@@ -974,6 +974,103 @@
     @keyframes mvbSpin{to{--mvb-a:360deg}}
     .grid .card:hover::before,.wf-node:hover::before,.wf-log:hover::before,.book:hover::before,.step:hover::after{animation:mvbSpin 2.6s linear infinite}
   }
+
+  /* ---------- projects: an incomplete last row is centered ---------- */
+  .grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+  .grid .card{flex:0 0 calc((100% - 40px) / 3);min-width:0}
+  @media(max-width:1000px){.grid .card{flex-basis:calc((100% - 20px) / 2)}}
+  @media(max-width:620px){.grid .card{flex-basis:100%}}
+
+  /* ---------- how I work: four animated steps ---------- */
+  @property --act{syntax:"<number>";inherits:false;initial-value:0}
+  .steps{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:1000px){.steps{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{
+    background-image:linear-gradient(90deg,var(--amber-fill),var(--teal));
+    background-repeat:no-repeat;background-position:0 0;background-origin:border-box;background-clip:border-box;
+    background-size:0% 3px;
+  }
+  .step::before{
+    transform:scale(calc(1 + var(--act) * .8));
+    box-shadow:0 0 calc(var(--act) * 14px) calc(var(--act) * 3px) color-mix(in srgb,var(--amber-fill) 70%,transparent);
+  }
+  .step h3{color:color-mix(in srgb,var(--amber) calc(var(--act) * 100%),var(--text))}
+
+  /* ---------- book a call: embedded calendar ---------- */
+  /* info on the left (contact rows stacked under the bullets), live calendar on the right */
+  .book{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}
+  @media(max-width:980px){.book{grid-template-columns:1fr}}
+  .bookinfo{display:flex;flex-direction:column}
+  .bookinfo>.contact-list{margin-top:28px}
+  .contact-list{margin-top:26px;display:flex;flex-direction:column}
+  .book>.bookcal{background:var(--panel-2) !important;padding:clamp(14px,2vw,22px);display:flex;flex-direction:column;gap:12px;min-width:0}
+  .cal-embed{flex:1;min-height:0}
+  .cal-embed iframe{display:block;width:100%;height:clamp(640px,82vh,780px);border:0;border-radius:8px;background:#fff}
+  .cal-fallback{
+    min-height:300px;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:14px;
+    padding:clamp(18px,3vw,32px);border:1px dashed var(--line);border-radius:8px;
+  }
+  .cal-fallback h3{font-size:1.25rem}
+  .cal-fallback p{margin:0;color:var(--muted);max-width:44ch}
+  .book .cal-note{margin:0;max-width:none;font-size:.82rem;color:var(--dim)}
+  .book .cal-note a{color:var(--amber);text-decoration:underline;text-underline-offset:3px}
+  @media (prefers-reduced-motion:no-preference){
+    @keyframes stepFill0{0%{background-size:0% 3px}8.00%,96%{background-size:100% 3px}100%{background-size:0% 3px}}
+    @keyframes stepOn0{0%{--act:0}2.00%,20.00%{--act:1}22.50%,100%{--act:0}}
+    .steps.rv.in .step:nth-child(1){animation:rise .8s cubic-bezier(.22,1,.36,1) backwards,stepFill0 11s linear infinite,stepOn0 11s linear infinite;animation-delay:0.00s,.9s,.9s}
+    @keyframes stepFill1{0%,21.82%{background-size:0% 3px}29.82%,96%{background-size:100% 3px}100%{background-size:0% 3px}}
+    @keyframes stepOn1{0%,21.82%{--act:0}23.82%,41.82%{--act:1}44.32%,100%{--act:0}}
+    .steps.rv.in .step:nth-child(2){animation:rise .8s cubic-bezier(.22,1,.36,1) backwards,stepFill1 11s linear infinite,stepOn1 11s linear infinite;animation-delay:0.14s,.9s,.9s}
+    @keyframes stepFill2{0%,43.64%{background-size:0% 3px}51.64%,96%{background-size:100% 3px}100%{background-size:0% 3px}}
+    @keyframes stepOn2{0%,43.64%{--act:0}45.64%,63.64%{--act:1}66.14%,100%{--act:0}}
+    .steps.rv.in .step:nth-child(3){animation:rise .8s cubic-bezier(.22,1,.36,1) backwards,stepFill2 11s linear infinite,stepOn2 11s linear infinite;animation-delay:0.28s,.9s,.9s}
+    @keyframes stepFill3{0%,65.45%{background-size:0% 3px}73.45%,96%{background-size:100% 3px}100%{background-size:0% 3px}}
+    @keyframes stepOn3{0%,65.45%{--act:0}67.45%,85.45%{--act:1}87.95%,100%{--act:0}}
+    .steps.rv.in .step:nth-child(4){animation:rise .8s cubic-bezier(.22,1,.36,1) backwards,stepFill3 11s linear infinite,stepOn3 11s linear infinite;animation-delay:0.42s,.9s,.9s}
+  }
+
+  /* ---------- extra motion: hero typer, tilts, contact polish ---------- */
+  .typer{margin-top:16px;font-family:var(--mono);font-size:.92rem;color:var(--muted);min-height:1.7em}
+  .typer b{color:var(--teal);font-weight:500}
+  .typer i{display:inline-block;width:2px;height:1.05em;margin-left:3px;vertical-align:-2px;background:var(--amber-fill);animation:caret 1s steps(1) infinite}
+  @keyframes caret{50%{opacity:0}}
+  .contact-row svg{transition:transform .25s ease,stroke .2s}
+  .contact-row:hover svg{stroke:var(--amber);transform:translateX(3px) scale(1.12)}
+  .copy-btn{
+    align-self:flex-start;margin:2px 0 8px 31px;padding:6px 11px;cursor:pointer;
+    border:1px solid var(--line);border-radius:3px;background:transparent;color:var(--muted);
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;
+    transition:color .18s,border-color .18s,transform .18s;
+  }
+  .copy-btn:hover{color:var(--amber);border-color:var(--amber);transform:translateY(-1px)}
+  .copy-btn.done{color:var(--teal);border-color:var(--teal)}
+  @media (prefers-reduced-motion:no-preference){
+    .hero .hero-in > div:first-child > :nth-child(5){animation-delay:.56s}
+    .portrait{transition:transform .6s cubic-bezier(.22,1,.36,1)}
+    .portrait.tilting{transform:perspective(900px) rotateX(var(--prx,0deg)) rotateY(var(--pry,0deg))}
+    .grid .card.rv.in.settled.tilt:hover{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px)}
+    @keyframes factPop{from{opacity:0;transform:translateY(6px) scale(.92)}}
+    .grid .card:hover .fact{animation:factPop .45s cubic-bezier(.22,1,.36,1) backwards}
+    .grid .card:hover .fact:nth-child(2){animation-delay:.05s}
+    .grid .card:hover .fact:nth-child(3){animation-delay:.1s}
+    .grid .card:hover .fact:nth-child(4){animation-delay:.15s}
+    .grid .card:hover .fact:nth-child(5){animation-delay:.2s}
+    .book.rv.in li{animation:rise .6s cubic-bezier(.22,1,.36,1) backwards}
+    .book.rv.in li:nth-child(1){animation-delay:.15s}
+    .book.rv.in li:nth-child(2){animation-delay:.27s}
+    .book.rv.in li:nth-child(3){animation-delay:.39s}
+    @keyframes draw{to{stroke-dashoffset:0}}
+    .book.rv.in li svg path{stroke-dasharray:24;stroke-dashoffset:24;animation:draw .55s ease forwards}
+    .book.rv.in li:nth-child(1) svg path{animation-delay:.45s}
+    .book.rv.in li:nth-child(2) svg path{animation-delay:.6s}
+    .book.rv.in li:nth-child(3) svg path{animation-delay:.75s}
+    .book.rv.in .contact-row{animation:rise .7s cubic-bezier(.22,1,.36,1) backwards}
+    .book.rv.in .contact-row:nth-of-type(1){animation-delay:.5s}
+    .book.rv.in .contact-row:nth-of-type(2){animation-delay:.6s}
+    .book.rv.in .contact-row:nth-of-type(3){animation-delay:.7s}
+    .book.rv.in .contact-row:nth-of-type(4){animation-delay:.8s}
+  }
 </style>
 
 <script>
@@ -999,7 +1096,7 @@
         <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
         <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/></svg>
       </button>
-      <a class="btn btn-primary" href="https://calendar.app.google/Ghh8PsMFLAUGLzxJ7" target="_blank" rel="noopener">Book a call</a>
+      <a class="btn btn-primary" href="#contact">Book a call</a>
     </div>
   </div>
 </nav>
@@ -1011,8 +1108,9 @@
       <span class="status"><span class="pulse"></span>Available for new builds</span>
       <h1>Automation &amp;<br><span class="amber">GoHighLevel</span><span class="split">Specialist</span></h1>
       <p class="lede">I help businesses streamline operations and eliminate manual work through workflow automation, system integrations, and AI-powered solutions — from building lead-to-close pipelines in GoHighLevel to connecting CRMs, spreadsheets, and messaging apps with n8n and Make — so they can save hours every week, respond to leads faster, and scale without adding headcount.</p>
+      <p class="typer">I build <b id="typer-word">GoHighLevel pipelines</b><i aria-hidden="true"></i></p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="https://calendar.app.google/Ghh8PsMFLAUGLzxJ7" target="_blank" rel="noopener">
+        <a class="btn btn-primary" href="#contact">
           Book a call
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
@@ -1443,11 +1541,16 @@
       </div>
       <div class="step">
         <span class="n">STEP 02</span>
+        <h3>Planning</h3>
+        <p>I turn what we found into a clear plan: which workflows to build, which tools they connect, what data each one touches and a timeline, so you approve the approach before any build starts.</p>
+      </div>
+      <div class="step">
+        <span class="n">STEP 03</span>
         <h3>Build and test</h3>
         <p>I build the workflows, connect the systems and run them against real data — including the error paths, so you find out about a failure before your client does.</p>
       </div>
       <div class="step">
-        <span class="n">STEP 03</span>
+        <span class="n">STEP 04</span>
         <h3>Hand it over documented</h3>
         <p>You get an SOP for every workflow: what triggers it, what it writes where, and how to change it. The system stays yours, not locked in my head.</p>
       </div>
@@ -1459,7 +1562,7 @@
   <div class="wrap">
     <div class="shead rv"><span class="dot"></span><span class="eyebrow">Book a call</span><span class="rule"></span></div>
     <div class="book rv">
-      <div>
+      <div class="bookinfo">
         <h2>Let's find the hours you're losing.</h2>
         <p>Pick a time that works for you. Bring the process that's costing you the most manual work — we'll look at it together.</p>
         <ul>
@@ -1467,24 +1570,34 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>An honest read on what's worth automating first</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>A concrete build plan and timeline — no obligation</span></li>
         </ul>
-      </div>
-      <div class="bookside">
-        <a class="contact-row" href="mailto:Jmarabiles246@gmail.com">
+        <div class="contact-list">
+          <a class="contact-row" href="mailto:Jmarabiles246@gmail.com">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
           <span><span class="clab">Email</span><span class="cval">Jmarabiles246@gmail.com</span></span>
         </a>
-        <a class="contact-row" href="tel:+639264347161">
+          <a class="contact-row" href="tel:+639264347161">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
           <span><span class="clab">Phone</span><span class="cval">0926 434 7161</span></span>
         </a>
-        <a class="contact-row" href="https://www.upwork.com/freelancers/~01c989b95d54cd79d4?mp_source=share" target="_blank" rel="noopener">
+          <a class="contact-row" href="https://www.upwork.com/freelancers/~01c989b95d54cd79d4?mp_source=share" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
           <span><span class="clab">Upwork</span><span class="cval">View my Upwork profile</span></span>
         </a>
-        <a class="btn btn-primary" href="https://calendar.app.google/Ghh8PsMFLAUGLzxJ7" target="_blank" rel="noopener">
-          Open booking calendar
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a class="contact-row" href="https://www.linkedin.com/in/gohighlevel-and-automation-specialist-john-louie-313958277" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-7M11 13a3 3 0 0 1 6 0v4"/></svg>
+          <span><span class="clab">LinkedIn</span><span class="cval">View my LinkedIn profile</span></span>
         </a>
+        </div>
+      </div>
+      <div class="bookcal">
+        <div class="cal-embed" id="booking-cal" data-embed="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2yroVRcLJTrdBfFHuDCVS8tENgZix_d7GfaLLQMak8AfO5h4cQ_balcAhJNuXogrg8baGNXDc3?gv=true" data-fallback="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2yroVRcLJTrdBfFHuDCVS8tENgZix_d7GfaLLQMak8AfO5h4cQ_balcAhJNuXogrg8baGNXDc3">
+          <div class="cal-fallback">
+            <h3>Pick a time that works for you</h3>
+            <p>Choose a date and time, then answer a few short questions about your business so I can prepare for our call.</p>
+            <a class="btn btn-primary" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2yroVRcLJTrdBfFHuDCVS8tENgZix_d7GfaLLQMak8AfO5h4cQ_balcAhJNuXogrg8baGNXDc3" target="_blank" rel="noopener">Open booking calendar</a>
+          </div>
+        </div>
+        <p class="cal-note" hidden>Calendar not loading? <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2yroVRcLJTrdBfFHuDCVS8tENgZix_d7GfaLLQMak8AfO5h4cQ_balcAhJNuXogrg8baGNXDc3" target="_blank" rel="noopener">Open the booking page in a new tab</a>.</p>
       </div>
     </div>
   </div>
@@ -1506,6 +1619,17 @@
 </div>
 
 <script>
+  /* ---- projects show screenshots only: drop the drawn box diagrams from every card that has a screenshot ---- */
+  (function () {
+    [].forEach.call(document.querySelectorAll('.card'), function (card) {
+      if (!card.querySelector('img')) return;
+      [].forEach.call(card.querySelectorAll('.sysfig'), function (fig) {
+        var slide = fig.closest('.slide');
+        (slide && card.contains(slide) ? slide : fig).remove();
+      });
+    });
+  })();
+
   /* ---- gold ring that trails the cursor across the page ---- */
   (function () {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -1981,6 +2105,103 @@
         });
       }).observe(grid, { attributes: true, attributeFilter: ['data-tab'] });
     }
+  })();
+
+  /* ---- hero: typed line of what I build ---- */
+  (function () {
+    var el = document.getElementById('typer-word');
+    if (!el) return;
+    var words = ['GoHighLevel pipelines', 'n8n AI workflows', 'Zapier & Make integrations', 'AI voice receptionists', 'Airtable client systems'];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = words[0]; return; }
+    var w = 0, c = words[0].length, del = true;
+    function tick() {
+      var word = words[w];
+      c += del ? -1 : 1;
+      el.textContent = word.slice(0, c);
+      var wait = del ? 35 : 70;
+      if (!del && c === word.length) { del = true; wait = 1700; }
+      else if (del && c === 0) { del = false; w = (w + 1) % words.length; wait = 350; }
+      setTimeout(tick, wait);
+    }
+    setTimeout(tick, 2200);
+  })();
+
+  /* ---- hover tilt: hero photo follows the mouse, project cards tilt toward it ---- */
+  (function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var hero = document.querySelector('.hero'), p = document.querySelector('.portrait');
+    if (hero && p) {
+      hero.addEventListener('mousemove', function (e) {
+        var r = p.getBoundingClientRect();
+        var x = (e.clientX - (r.left + r.width / 2)) / window.innerWidth;
+        var y = (e.clientY - (r.top + r.height / 2)) / window.innerHeight;
+        p.classList.add('tilting');
+        p.style.setProperty('--pry', (x * 18).toFixed(2) + 'deg');
+        p.style.setProperty('--prx', (-y * 18).toFixed(2) + 'deg');
+      });
+      hero.addEventListener('mouseleave', function () {
+        p.style.setProperty('--prx', '0deg');
+        p.style.setProperty('--pry', '0deg');
+      });
+    }
+    var grid = document.getElementById('work-grid');
+    if (grid) {
+      grid.addEventListener('mousemove', function (e) {
+        var c = e.target.closest ? e.target.closest('.card') : null;
+        if (!c) return;
+        var r = c.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        c.classList.add('tilt');
+        c.style.setProperty('--ry', (x * 7).toFixed(2) + 'deg');
+        c.style.setProperty('--rx', (-y * 7).toFixed(2) + 'deg');
+      });
+      grid.addEventListener('mouseout', function (e) {
+        var c = e.target.closest ? e.target.closest('.card') : null;
+        if (c && !c.contains(e.relatedTarget)) {
+          c.style.setProperty('--rx', '0deg');
+          c.style.setProperty('--ry', '0deg');
+        }
+      });
+    }
+  })();
+
+  /* ---- contact: copy-email button ---- */
+  (function () {
+    var row = document.querySelector('.contact-row[href^="mailto:"]');
+    if (!row) return;
+    var EMAIL = 'Jmarabiles246@gmail.com';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy email';
+    row.insertAdjacentElement('afterend', btn);
+    btn.addEventListener('click', function () {
+      function show(ok) {
+        btn.textContent = ok ? 'Copied ✓' : EMAIL;
+        btn.classList.toggle('done', ok);
+        setTimeout(function () { btn.textContent = 'Copy email'; btn.classList.remove('done'); }, 1800);
+      }
+      try { navigator.clipboard.writeText(EMAIL).then(function () { show(true); }, function () { show(false); }); }
+      catch (e) { show(false); }
+    });
+  })();
+
+  /* ---- booking calendar: embeds the Google Calendar schedule when data-embed holds its embed URL ---- */
+  (function () {
+    var host = document.getElementById('booking-cal');
+    if (!host) return;
+    var url = (host.getAttribute('data-embed') || '').trim();
+    if (!/^https:\/\/calendar\.google\.com\//.test(url)) return;
+    var frame = document.createElement('iframe');
+    frame.src = url;
+    frame.title = 'Book a call with John Louie';
+    frame.loading = 'lazy';
+    frame.setAttribute('allowfullscreen', '');
+    host.textContent = '';
+    host.appendChild(frame);
+    var note = document.querySelector('.cal-note');
+    if (note) note.hidden = false;
   })();
 </script>
 
